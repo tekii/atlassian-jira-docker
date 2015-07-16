@@ -1,2 +1,2 @@
 # jira-service-desk
-JIRA Service Desk + Apache + PostgreSQL
+JIRA Service Desk + Apache
