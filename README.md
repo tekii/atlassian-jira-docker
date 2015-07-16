@@ -1,2 +1,2 @@
-# postgresql
-PostgreSQL docker + kubernetes
+# jira-service-desk
+JIRA Service Desk + Apache + PostgreSQL
