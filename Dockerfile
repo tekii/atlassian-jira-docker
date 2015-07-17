@@ -3,6 +3,6 @@
 #
 
 # 
-FROM google/debian:wheezy
+FROM tekii/debian-server-jre:latest
 
 MAINTAINER pr@tekii.com.ar
