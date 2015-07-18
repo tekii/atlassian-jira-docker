@@ -1,1 +1,4 @@
--atlassian-jira-6.4.8.tar.gz
+Makefile
+.gitignore
+.git
+*.md
