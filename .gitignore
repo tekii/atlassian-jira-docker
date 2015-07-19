@@ -1,2 +1,5 @@
-atlassian-jira-6.4.8.tar.gz
+atlassian-jira-*.tar.gz
+Dockerfile
 *~
+#*
+.#*
