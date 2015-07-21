@@ -37,6 +37,9 @@ PHONY += image
 image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
 	docker build -t $(DOCKER_TAG) .
 
+PHONY+= run
+run: image
+	docker run -p 8080:8080  -v $(shell pwd)/volume:/home/jira $(DOCKER_TAG)
 
 PHONY+= push-to-docker
 push-to-docker: image

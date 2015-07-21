@@ -29,3 +29,5 @@ ENV JIRA_HOME=/home/jira \
 EXPOSE 8080
 
 USER jira
+
+ENTRYPOINT ["/opt/jira/bin/start-jira.sh", "-fg"]
