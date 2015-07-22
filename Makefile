@@ -31,7 +31,7 @@ Dockerfile: Dockerfile.m4 Makefile
 
 PHONY += update-patch
 update-patch:
-	diff -ruN $(JIRA_ROOT)/ aux/ > config.patch
+	diff -ruN $(JIRA_ROOT)/ aux/ > config.patch; [ $$? -eq 1 ]
 
 PHONY += image
 image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
