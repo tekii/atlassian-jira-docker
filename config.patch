@@ -1,0 +1,15 @@
+diff -ruN -p1 atlassian-jira-standalone/atlassian-jira/WEB-INF/classes/jira-application.properties aux/atlassian-jira/WEB-INF/classes/jira-application.properties
+--- atlassian-jira-standalone/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-07-16 00:42:14.000000000 -0300
++++ aux/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-07-21 22:09:43.633230408 -0300
+@@ -1,2 +1,2 @@
+ # Do not modify this file unless instructed. It is here to store the location of the JIRA home directory only and is typically written to by the installer.
+-jira.home = 
++jira.home = /home/jira
+diff -ruN -p1 atlassian-jira-standalone/bin/setenv.sh aux/bin/setenv.sh
+--- atlassian-jira-standalone/bin/setenv.sh	2015-07-16 00:53:49.000000000 -0300
++++ aux/bin/setenv.sh	2015-07-21 22:09:23.836764585 -0300
+@@ -8,3 +8,3 @@
+ #
+-JVM_SUPPORT_RECOMMENDED_ARGS=""
++JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.plugins.enable.wait=300"
+ 
