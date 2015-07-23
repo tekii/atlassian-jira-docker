@@ -1,5 +1,5 @@
 #
-# JIRA Service Desk Dockerfile
+# JIRA Dockerfile
 #
 
 # 

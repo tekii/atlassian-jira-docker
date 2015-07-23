@@ -1,2 +1,2 @@
-# jira-service-desk
-JIRA Service Desk
+# jira
+Atlassian JIRA 

@@ -1,11 +1,11 @@
 ##
-## JIRA Service Desk
+## JIRA
 ##
 JIRA_VERSION:=6.4.8
 JIRA_TARBALL:=atlassian-jira-$(JIRA_VERSION).tar.gz
 JIRA_LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 JIRA_ROOT:=atlassian-jira-standalone
-DOCKER_TAG:=tekii/jira-service-desk:$(JIRA_VERSION)
+DOCKER_TAG:=tekii/jira:$(JIRA_VERSION)
 ##
 ## M4
 ##
@@ -47,16 +47,18 @@ push-to-docker: image
 
 PHONY += push-to-google
 push-to-google: image
-	docker tag $(DOCKER_TAG) gcr.io/test-teky/jira-service-desk:$(JIRA_VERSION)
-	gcloud docker push gcr.io/test-teky/jira-service-desk:$(JIRA_VERSION)
+	docker tag $(DOCKER_TAG) gcr.io/test-teky/jira:$(JIRA_VERSION)
+	gcloud docker push gcr.io/test-teky/jira:$(JIRA_VERSION)
 
 PHONY += clean
 clean:
-	rm -f $(JIRA_TARBALL)
+	rm -rf $(JIRA_ROOT)
+
 
 PHONY += realclean
 realclean: clean
 	rm -f Dokerfile
+	rm -f $(JIRA_TARBALL)
 
 PHONY += all
 all: $(JDK_TARBALL)
