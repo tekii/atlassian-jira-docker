@@ -5,6 +5,7 @@ JIRA_VERSION:=6.4.8
 JIRA_TARBALL:=atlassian-jira-$(JIRA_VERSION).tar.gz
 JIRA_LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 JIRA_ROOT:=atlassian-jira-standalone
+JIRA_HOME=/var/atlassian/application-data/jira
 DOCKER_TAG:=tekii/jira:$(JIRA_VERSION)
 ##
 ## M4
@@ -13,6 +14,7 @@ M4= $(shell which m4)
 M4_FLAGS= -P \
 	-D __JIRA_VERSION__=$(JIRA_VERSION) \
 	-D __JIRA_ROOT__=$(JIRA_ROOT) \
+	-D __JIRA_HOME__=$(JIRA_HOME) \
 	-D __DOCKER_TAG__=$(DOCKER_TAG)
 
 $(JIRA_TARBALL):
