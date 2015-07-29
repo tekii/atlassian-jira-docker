@@ -1,10 +1,10 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=6.4.8
+JIRA_VERSION:=7.0.0-m01
 JIRA_TARBALL:=atlassian-jira-$(JIRA_VERSION).tar.gz
 JIRA_LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
-JIRA_ROOT:=atlassian-jira-standalone
+JIRA_ROOT:=patched
 JIRA_HOME=/var/atlassian/application-data/jira
 DOCKER_TAG:=tekii/jira:$(JIRA_VERSION)
 ##
@@ -33,7 +33,7 @@ Dockerfile: Dockerfile.m4 Makefile
 
 PHONY += update-patch
 update-patch:
-	diff -ruN $(JIRA_ROOT)/ aux/ > config.patch; [ $$? -eq 1 ]
+	diff -ruN $(JIRA_ROOT)/ original/ > config.patch; [ $$? -eq 1 ]
 
 PHONY += image
 image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
@@ -41,7 +41,7 @@ image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
 
 PHONY+= run
 run: image
-	docker run -p 8080:8080  -v $(shell pwd)/volume:/home/jira $(DOCKER_TAG)
+	docker run -p 8080:8080  -v $(shell pwd)/volume6:$(JIRA_HOME) $(DOCKER_TAG)
 
 PHONY+= push-to-docker
 push-to-docker: image

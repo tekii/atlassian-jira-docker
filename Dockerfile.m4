@@ -6,7 +6,7 @@ FROM tekii/debian-server-jre
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
 
-LABEL version="__JIRA_VERSION__-standalone"
+LABEL version="__JIRA_VERSION__"
 
 ENV JIRA_HOME=__JIRA_HOME__ \
     JIRA_VERSION=__JIRA_VERSION__
