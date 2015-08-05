@@ -55,11 +55,10 @@ push-to-google: image
 PHONY += clean
 clean:
 	rm -rf $(JIRA_ROOT)
-
+	rm -f Dokerfile	
 
 PHONY += realclean
 realclean: clean
-	rm -f Dokerfile
 	rm -f $(JIRA_TARBALL)
 
 PHONY += all
