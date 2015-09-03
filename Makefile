@@ -1,7 +1,7 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=7.0.0-m01
+JIRA_VERSION:=6.4.11
 JIRA_TARBALL:=atlassian-jira-$(JIRA_VERSION).tar.gz
 JIRA_LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 JIRA_ROOT:=patched
@@ -41,16 +41,17 @@ image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
 
 PHONY+= run
 run: #image
-	docker run -p 8080:8080  -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
+	docker run -p 8080:8080   -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
+	#docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
 
 PHONY+= push-to-docker
 push-to-docker: image
 	docker push $(DOCKER_TAG)
 
 PHONY += push-to-google
-push-to-google: image
-	docker tag $(DOCKER_TAG) gcr.io/test-teky/jira:$(JIRA_VERSION)
-	gcloud docker push gcr.io/test-teky/jira:$(JIRA_VERSION)
+push-to-google: #image
+	#docker tag $(DOCKER_TAG) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
+	gcloud docker push gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 
 PHONY += clean
 clean:
