@@ -32,6 +32,7 @@ RUN chown --recursive root.root /opt/jira && \
     chown --recursive jira.root /opt/jira/work
 
 EXPOSE 8080
+EXPOSE 8443
 
 USER jira
 

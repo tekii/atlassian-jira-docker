@@ -33,7 +33,9 @@ Dockerfile: Dockerfile.m4 Makefile
 
 PHONY += update-patch
 update-patch:
-	diff -ruN $(JIRA_ROOT)/ original/ > config.patch; [ $$? -eq 1 ]
+	#mkdir original
+	#tar zxvf atlassian-jira-6.4.11.tar.gz -C original --strip-components=1
+	diff -ruN -p1 original/ $(JIRA_ROOT)/  > config.patch; [ $$? -eq 1 ]
 
 PHONY += image
 image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
@@ -41,7 +43,7 @@ image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
 
 PHONY+= run
 run: #image
-	docker run -p 8080:8080   -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
+	docker run -p 8080:8080 -p 8443:8443 -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
 	#docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
 
 PHONY+= push-to-docker
@@ -50,7 +52,7 @@ push-to-docker: image
 
 PHONY += push-to-google
 push-to-google: #image
-	#docker tag $(DOCKER_TAG) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
+	docker tag $(DOCKER_TAG) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 	gcloud docker push gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 
 PHONY += clean
