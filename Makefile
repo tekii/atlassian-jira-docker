@@ -1,10 +1,10 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=6.4.8
+JIRA_VERSION:=6.4.11
 JIRA_TARBALL:=atlassian-jira-$(JIRA_VERSION).tar.gz
 JIRA_LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
-JIRA_ROOT:=atlassian-jira-standalone
+JIRA_ROOT:=patched
 JIRA_HOME=/var/atlassian/application-data/jira
 DOCKER_TAG:=tekii/jira:$(JIRA_VERSION)
 ##
@@ -33,33 +33,35 @@ Dockerfile: Dockerfile.m4 Makefile
 
 PHONY += update-patch
 update-patch:
-	diff -ruN $(JIRA_ROOT)/ aux/ > config.patch; [ $$? -eq 1 ]
+	#mkdir original
+	#tar zxvf atlassian-jira-6.4.11.tar.gz -C original --strip-components=1
+	diff -ruN -p1 original/ $(JIRA_ROOT)/  > config.patch; [ $$? -eq 1 ]
 
 PHONY += image
 image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
 	docker build -t $(DOCKER_TAG) .
 
 PHONY+= run
-run: image
-	docker run -p 8080:8080  -v $(shell pwd)/volume:/home/jira $(DOCKER_TAG)
+run: #image
+	docker run -p 8080:8080 -p 8443:8443 -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
+	#docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
 
 PHONY+= push-to-docker
 push-to-docker: image
 	docker push $(DOCKER_TAG)
 
 PHONY += push-to-google
-push-to-google: image
-	docker tag $(DOCKER_TAG) gcr.io/test-teky/jira:$(JIRA_VERSION)
-	gcloud docker push gcr.io/test-teky/jira:$(JIRA_VERSION)
+push-to-google: #image
+	docker tag $(DOCKER_TAG) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
+	gcloud docker push gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 
 PHONY += clean
 clean:
 	rm -rf $(JIRA_ROOT)
-
+	rm -f Dokerfile	
 
 PHONY += realclean
 realclean: clean
-	rm -f Dokerfile
 	rm -f $(JIRA_TARBALL)
 
 PHONY += all

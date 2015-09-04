@@ -1,15 +1,36 @@
-diff -ruN -p1 atlassian-jira-standalone/atlassian-jira/WEB-INF/classes/jira-application.properties aux/atlassian-jira/WEB-INF/classes/jira-application.properties
---- atlassian-jira-standalone/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-07-16 00:42:14.000000000 -0300
-+++ aux/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-07-21 22:09:43.633230408 -0300
+diff -ruN -p1 original/atlassian-jira/WEB-INF/classes/jira-application.properties patched/atlassian-jira/WEB-INF/classes/jira-application.properties
+--- original/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-08-24 23:44:12.000000000 -0300
++++ patched/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-08-28 17:26:42.849579683 -0300
 @@ -1,2 +1,2 @@
  # Do not modify this file unless instructed. It is here to store the location of the JIRA home directory only and is typically written to by the installer.
 -jira.home = 
 +jira.home = /home/jira
-diff -ruN -p1 atlassian-jira-standalone/bin/setenv.sh aux/bin/setenv.sh
---- atlassian-jira-standalone/bin/setenv.sh	2015-07-16 00:53:49.000000000 -0300
-+++ aux/bin/setenv.sh	2015-07-21 22:09:23.836764585 -0300
+diff -ruN -p1 original/bin/setenv.sh patched/bin/setenv.sh
+--- original/bin/setenv.sh	2015-08-24 23:59:48.000000000 -0300
++++ patched/bin/setenv.sh	2015-08-28 17:26:42.853579697 -0300
 @@ -8,3 +8,3 @@
  #
 -JVM_SUPPORT_RECOMMENDED_ARGS=""
 +JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.plugins.enable.wait=300"
  
+diff -ruN -p1 original/conf/server.xml patched/conf/server.xml
+--- original/conf/server.xml	2015-08-24 23:59:47.000000000 -0300
++++ patched/conf/server.xml	2015-09-03 17:49:30.164258063 -0300
+@@ -62,2 +62,17 @@
+ 
++        <Connector port="8443"
++                   maxThreads="150"
++                   minSpareThreads="25"
++                   connectionTimeout="20000"
++                   enableLookups="false"
++                   maxHttpHeaderSize="8192"
++                   protocol="HTTP/1.1"
++                   useBodyEncodingForURI="true"
++                   redirectPort="443"
++                   acceptCount="100"
++                   disableUploadTimeout="true"
++                   scheme="https"
++                   proxyPort="443"
++                   secure="true"/>
++
+         <!--

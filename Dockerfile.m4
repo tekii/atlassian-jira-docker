@@ -6,7 +6,7 @@ FROM tekii/debian-server-jre
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
 
-LABEL version="__JIRA_VERSION__-standalone"
+LABEL version="__JIRA_VERSION__"
 
 ENV JIRA_HOME=__JIRA_HOME__ \
     JIRA_VERSION=__JIRA_VERSION__
@@ -19,7 +19,8 @@ RUN groupadd --gid 2000 jira && \
 # allow the jira user to write in it.
 VOLUME __JIRA_HOME__
 
-# IT-200 - check is this chown actually works...
+# IT-200 - check is this chown actually works...  note: this change
+# the ownership in the aufs only, see the comment above.
 RUN mkdir -p __JIRA_HOME__ && \
     chown -R jira.jira __JIRA_HOME__
 
@@ -31,6 +32,7 @@ RUN chown --recursive root.root /opt/jira && \
     chown --recursive jira.root /opt/jira/work
 
 EXPOSE 8080
+EXPOSE 8443
 
 USER jira
 
