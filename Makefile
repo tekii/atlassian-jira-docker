@@ -43,7 +43,9 @@ image: $(JIRA_TARBALL) Dockerfile $(JIRA_ROOT)
 
 PHONY+= run
 run: #image
-	docker run -p 8080:8080 -p 8443:8443 -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
+	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=" -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
+#	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=" -v $(shell pwd)/volume:$(JIRA_HOME) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
+	#docker run -p 8080:8080 -p 8443:8443 -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
 	#docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
 
 PHONY+= push-to-docker
@@ -51,7 +53,7 @@ push-to-docker: image
 	docker push $(DOCKER_TAG)
 
 PHONY += push-to-google
-push-to-google: #image
+push-to-google: image
 	docker tag $(DOCKER_TAG) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 	gcloud docker push gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 
