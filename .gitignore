@@ -1,8 +1,7 @@
-atlassian-jira-*
-Dockerfile
+atlassian-*
 *~
-#*
+\#*\#
 .#*
 patched
 original
-volume
+volume*

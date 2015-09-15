@@ -2,38 +2,52 @@
 # JIRA Dockerfile
 #
 # 
-FROM tekii/debian-server-jre
+FROM tekii/server-jre
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
 
-LABEL version="__JIRA_VERSION__"
+LABEL version=__VERSION__
 
-ENV JIRA_HOME=__JIRA_HOME__ \
-    JIRA_VERSION=__JIRA_VERSION__
+COPY config.patch __INSTALL__/
 
-RUN groupadd --gid 2000 jira && \
-    useradd --uid 2000 --gid 2000 --home-dir __JIRA_HOME__ \
-            --shell /bin/sh --comment "Account for running JIRA" jira
+USER root
 
-# you must 'chown 2000.2000 .' this directory in the host in order to
-# allow the jira user to write in it.
-VOLUME __JIRA_HOME__
+RUN apt-get update && \
+    apt-get install --assume-yes --no-install-recommends git wget patch ca-certificates && \
+    echo "start downloading and decompressing __LOCATION__/__TARBALL__" && \
+    wget -q -O - __LOCATION__/__TARBALL__ | tar -xz --strip=1 -C __INSTALL__ && \
+    echo "end downloading and decompressing." && \
+    cd __INSTALL__ && patch -p1 -i config.patch && cd - && \
+    apt-get purge --assume-yes wget patch && \
+    apt-get clean autoclean && \
+    rm -rf /var/lib/{apt,dpkg,cache,log}/ && \
+    mkdir --parents __INSTALL__/conf/Catalina && \
+    chmod --recursive 700 __INSTALL__/conf/Catalina && \
+    chmod --recursive 700 __INSTALL__/logs && \
+    chmod --recursive 700 __INSTALL__/temp && \
+    chmod --recursive 700 __INSTALL__/work && \
+    chown --recursive root:root __INSTALL__ && \
+    chown --recursive __USER__:__GROUP__ __INSTALL__/logs && \
+    chown --recursive __USER__:__GROUP__ __INSTALL__/temp && \
+    chown --recursive __USER__:__GROUP__ __INSTALL__/work && \
+    chown --recursive __USER__:__GROUP__ __INSTALL__/conf/Catalina
+#
+ENV JIRA_HOME=__HOME__
+# override by conf/bin/user.sh
+ENV JIRS_USER=__USER__
+# default value for the tomcat contextPath, to be override by kubernetes
+ENV CATALINA_OPTS="-Dtekii.contextPath="
+#
+ENV JAVA_OPTS="-Datlassian.plugins.enable.wait=300"
 
-# IT-200 - check is this chown actually works...  note: this change
-# the ownership in the aufs only, see the comment above.
-RUN mkdir -p __JIRA_HOME__ && \
-    chown -R jira.jira __JIRA_HOME__
-
-COPY __JIRA_ROOT__ /opt/jira/
-
-RUN chown --recursive root.root /opt/jira && \
-    chown --recursive jira.root /opt/jira/logs && \
-    chown --recursive jira.root /opt/jira/temp && \
-    chown --recursive jira.root /opt/jira/work
-
+# you must 'chown __USER__.__GROUP__ .' this directory in the host in
+# order to allow the jira user to write in it.
+VOLUME __HOME__
+# HTTP Port
 EXPOSE 8080
+# HTTPS Proxy Port
 EXPOSE 8443
+#
+USER __USER__:__GROUP__
 
-USER jira
-
-ENTRYPOINT ["/opt/jira/bin/start-jira.sh", "-fg"]
+ENTRYPOINT ["__INSTALL__/bin/start-jira.sh", "-fg"]
