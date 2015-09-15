@@ -51,7 +51,7 @@ image: Dockerfile config.patch
 
 PHONY+= run
 run: #image
-	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=" -v $(shell pwd)/volume:$(HOME) $(TAG)
+	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=/jira" -v $(shell pwd)/volume:$(HOME) $(TAG)
 #	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=" -v $(shell pwd)/volume:$(JIRA_HOME) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 #	docker run -p 8080:8080 -p 8443:8443 -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
 #	docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
