@@ -7,4 +7,5 @@ Dockerfile.m4
 *.template
 *.yaml
 original
-volume
+patched
+volume*
