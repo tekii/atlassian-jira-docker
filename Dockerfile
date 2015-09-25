@@ -6,7 +6,7 @@ FROM tekii/server-jre
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
 
-LABEL version=6.4.11
+LABEL version=6.4.12
 
 COPY config.patch /opt/atlassian/jira/
 
@@ -14,8 +14,8 @@ USER root
 
 RUN apt-get update && \
     apt-get install --assume-yes --no-install-recommends git wget patch ca-certificates && \
-    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.11.tar.gz" && \
-    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.11.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
+    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.12.tar.gz" && \
+    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.12.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
     echo "end downloading and decompressing." && \
     cd /opt/atlassian/jira && patch -p1 -i config.patch && cd - && \
     apt-get purge --assume-yes wget patch && \

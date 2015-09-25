@@ -1,7 +1,7 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=6.4.11
+JIRA_VERSION:=6.4.12
 TARBALL:=atlassian-jira-$(JIRA_VERSION).tar.gz
 LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 ORIGINAL_INSTALL:=original
@@ -54,7 +54,7 @@ run: #image
 	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=/jira" -v $(shell pwd)/volume:$(HOME) $(TAG)
 #	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=" -v $(shell pwd)/volume:$(JIRA_HOME) gcr.io/mrg-teky/jira:$(JIRA_VERSION)
 #	docker run -p 8080:8080 -p 8443:8443 -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
-#	docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(DOCKER_TAG)
+#	docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(TAG)
 
 PHONY += push-to-google
 push-to-google: image
