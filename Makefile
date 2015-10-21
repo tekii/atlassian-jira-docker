@@ -1,14 +1,14 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=6.4.12
-TARBALL:=atlassian-jira-$(JIRA_VERSION).tar.gz
+JIRA_VERSION:=7.0.0
+TARBALL:=atlassian-jira-core-$(JIRA_VERSION).tar.gz
 LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 ORIGINAL_INSTALL:=original
 PATCHED_INSTALL:=patched
 HOME=/var/atlassian/application-data/jira
 INSTALL:=/opt/atlassian/jira
-TAG:=tekii/atlassian-jira
+TAG:=tekii/atlassian-jira-core
 RUN_USER:=daemon
 RUN_GROUP:=daemon
 
@@ -28,6 +28,9 @@ M4_FLAGS= -P \
 $(TARBALL):
 	wget $(LOCATION)/$(TARBALL)
 
+$(ORIGINAL_INSTALL): $(TARBALL)
+	mkdir -p $@
+	tar zxvf $(TARBALL) -C $@ --strip-components=1
 
 $(PATCHED_INSTALL): $(TARBALL) config.patch
 	mkdir -p $@
@@ -40,9 +43,7 @@ Dockerfile: Dockerfile.m4 Makefile
 
 
 PHONY += update-patch
-update-patch:
-#	mkdir original
-#	tar zxvf atlassian-jira-6.4.11.tar.gz -C original --strip-components=1
+update-patch: $(ORIGINAL_INSTALL)
 	diff -ruN -p1 $(ORIGINAL_INSTALL)/ $(PATCHED_INSTALL)/  > config.patch; [ $$? -eq 1 ]
 
 PHONY += image

@@ -1,7 +1,7 @@
 #
 # JIRA Dockerfile
 #
-# 
+#
 FROM tekii/server-jre
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
@@ -12,14 +12,16 @@ COPY config.patch __INSTALL__/
 
 USER root
 
-RUN apt-get update && \
-    apt-get install --assume-yes --no-install-recommends git wget patch ca-certificates && \
+RUN apt-get --quiet=2 update && \
+    apt-get --quiet=2 install --assume-yes --no-install-recommends wget patch && \
     echo "start downloading and decompressing __LOCATION__/__TARBALL__" && \
     wget -q -O - __LOCATION__/__TARBALL__ | tar -xz --strip=1 -C __INSTALL__ && \
     echo "end downloading and decompressing." && \
     cd __INSTALL__ && patch -p1 -i config.patch && cd - && \
     apt-get purge --assume-yes wget patch && \
-    apt-get clean autoclean && \
+    apt-get --quiet=2 autoremove --assume-yes && \
+    apt-get --quiet=2 clean && \
+    apt-get --quiet=2 autoclean && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ && \
     mkdir --parents __INSTALL__/conf/Catalina && \
     chmod --recursive 700 __INSTALL__/conf/Catalina && \
@@ -34,7 +36,7 @@ RUN apt-get update && \
 #
 ENV JIRA_HOME=__HOME__
 # override by conf/bin/user.sh
-ENV JIRS_USER=__USER__
+ENV JIRA_USER=__USER__
 # default value for the tomcat contextPath, to be override by kubernetes
 ENV CATALINA_OPTS="-Dtekii.contextPath="
 #

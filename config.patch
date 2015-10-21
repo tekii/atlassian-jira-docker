@@ -1,22 +1,23 @@
-diff -ruN -p1 original/atlassian-jira/WEB-INF/classes/jira-application.properties patched/atlassian-jira/WEB-INF/classes/jira-application.properties
---- original/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-08-24 23:44:12.000000000 -0300
-+++ patched/atlassian-jira/WEB-INF/classes/jira-application.properties	2015-09-07 11:40:32.749524352 -0300
-@@ -1,2 +1,2 @@
- # Do not modify this file unless instructed. It is here to store the location of the JIRA home directory only and is typically written to by the installer.
--jira.home = 
-+jira.home = 
 diff -ruN -p1 original/bin/setenv.sh patched/bin/setenv.sh
---- original/bin/setenv.sh	2015-08-24 23:59:48.000000000 -0300
-+++ patched/bin/setenv.sh	2015-09-07 11:40:32.749524352 -0300
+--- original/bin/setenv.sh	2015-09-30 11:10:09.000000000 -0300
++++ patched/bin/setenv.sh	2015-10-21 16:28:06.465801300 -0300
 @@ -8,3 +8,3 @@
  #
 -JVM_SUPPORT_RECOMMENDED_ARGS=""
 +JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.plugins.enable.wait=300"
  
+@@ -14,3 +14,3 @@ JVM_SUPPORT_RECOMMENDED_ARGS=""
+ JVM_MINIMUM_MEMORY="384m"
+-JVM_MAXIMUM_MEMORY="768m"
++JVM_MAXIMUM_MEMORY="512m"
+ 
+@@ -101,2 +101 @@ echo ""
+ echo "Server startup logs are located in $LOGBASEABS/logs/catalina.out"
+-
 diff -ruN -p1 original/conf/server.xml patched/conf/server.xml
---- original/conf/server.xml	2015-08-24 23:59:47.000000000 -0300
-+++ patched/conf/server.xml	2015-09-07 11:40:57.689599348 -0300
-@@ -62,2 +62,17 @@
+--- original/conf/server.xml	2015-09-30 11:10:09.000000000 -0300
++++ patched/conf/server.xml	2015-10-20 17:41:48.374446363 -0300
+@@ -66,2 +66,17 @@
  
 +        <Connector port="8443"
 +                   maxThreads="50"
@@ -34,7 +35,7 @@ diff -ruN -p1 original/conf/server.xml patched/conf/server.xml
 +                   secure="true"/>
 +
          <!--
-@@ -115,3 +130,3 @@
+@@ -119,3 +134,3 @@
  
 -                <Context path="" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
 +                <Context path="${tekii.contextPath}" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">

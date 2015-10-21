@@ -1,25 +1,27 @@
 #
 # JIRA Dockerfile
 #
-# 
+#
 FROM tekii/server-jre
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
 
-LABEL version=6.4.12
+LABEL version=7.0.0
 
 COPY config.patch /opt/atlassian/jira/
 
 USER root
 
-RUN apt-get update && \
-    apt-get install --assume-yes --no-install-recommends git wget patch ca-certificates && \
-    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.12.tar.gz" && \
-    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.12.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
+RUN apt-get --quiet=2 update && \
+    apt-get --quiet=2 install --assume-yes --no-install-recommends wget patch && \
+    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.0.tar.gz" && \
+    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.0.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
     echo "end downloading and decompressing." && \
     cd /opt/atlassian/jira && patch -p1 -i config.patch && cd - && \
     apt-get purge --assume-yes wget patch && \
-    apt-get clean autoclean && \
+    apt-get --quiet=2 autoremove --assume-yes && \
+    apt-get --quiet=2 clean && \
+    apt-get --quiet=2 autoclean && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ && \
     mkdir --parents /opt/atlassian/jira/conf/Catalina && \
     chmod --recursive 700 /opt/atlassian/jira/conf/Catalina && \
@@ -34,7 +36,7 @@ RUN apt-get update && \
 #
 ENV JIRA_HOME=/var/atlassian/application-data/jira
 # override by conf/bin/user.sh
-ENV JIRS_USER=daemon
+ENV JIRA_USER=daemon
 # default value for the tomcat contextPath, to be override by kubernetes
 ENV CATALINA_OPTS="-Dtekii.contextPath="
 #
