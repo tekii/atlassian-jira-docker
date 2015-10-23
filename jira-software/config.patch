@@ -1,1 +1,37 @@
-../config.patch
+diff -ruN -p1 original/bin/setenv.sh patched/bin/setenv.sh
+--- original/bin/setenv.sh	2015-09-30 11:10:09.000000000 -0300
++++ patched/bin/setenv.sh	2015-10-21 18:29:09.075349861 -0300
+@@ -8,3 +8,3 @@
+ #
+-JVM_SUPPORT_RECOMMENDED_ARGS=""
++JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.plugins.enable.wait=300"
+ 
+@@ -101,2 +101 @@ echo ""
+ echo "Server startup logs are located in $LOGBASEABS/logs/catalina.out"
+-
+diff -ruN -p1 original/conf/server.xml patched/conf/server.xml
+--- original/conf/server.xml	2015-09-30 11:10:09.000000000 -0300
++++ patched/conf/server.xml	2015-10-20 17:41:48.374446363 -0300
+@@ -66,2 +66,17 @@
+ 
++        <Connector port="8443"
++                   maxThreads="50"
++                   minSpareThreads="25"
++                   connectionTimeout="20000"
++                   enableLookups="false"
++                   maxHttpHeaderSize="8192"
++                   protocol="HTTP/1.1"
++                   useBodyEncodingForURI="true"
++                   redirectPort="443"
++                   acceptCount="100"
++                   disableUploadTimeout="true"
++                   scheme="https"
++                   proxyPort="443"
++                   secure="true"/>
++
+         <!--
+@@ -119,3 +134,3 @@
+ 
+-                <Context path="" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
++                <Context path="${tekii.contextPath}" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
+ 
