@@ -32,9 +32,11 @@ M4_FLAGS= -P \
 	-D __HOME__=$(HOME) \
 	-D __USER__=$(RUN_USER) -D __GROUP__=$(RUN_GROUP)
 
-$(CORE_PRODUCT).Dockerfile: TARBALL=atlassian-$(CORE_PRODUCT)-$(CORE_VERSION).tar.gz
-$(SOFT_PRODUCT).Dockerfile: TARBALL=atlassian-$(SOFT_PRODUCT)-$(SOFT_VERSION)-jira-$(JIRA_VERSION).tar.gz
-$(SDES_PRODUCT).Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION)-jira-$(JIRA_VERSION).tar.gz
+PRODUCTS:=$(CORE_PRODUCT) $(SOFT_PRODUCT) $(SDES_PRODUCT)
+
+$(CORE_PRODUCT)/Dockerfile: TARBALL=atlassian-$(CORE_PRODUCT)-$(CORE_VERSION).tar.gz
+$(SOFT_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SOFT_PRODUCT)-$(SOFT_VERSION)-jira-$(JIRA_VERSION).tar.gz
+$(SDES_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION)-jira-$(JIRA_VERSION).tar.gz
 
 $(TARBALL):
 	wget $(LOCATION)/$(TARBALL)
@@ -53,16 +55,32 @@ PHONY += update-patch
 update-patch: $(ORIGINAL_INSTALL)
 	diff -ruN -p1 $(ORIGINAL_INSTALL)/ $(PATCHED_INSTALL)/  > config.patch; [ $$? -eq 1 ]
 
-%.Dockerfile: Dockerfile.m4
+%/:
+	mkdir -p $*
+
+.PRECIOUS:
+%/config.patch: config.patch %/
+	cp $< $*/
+
+%/Dockerfile: Dockerfile.m4 %/
 	$(M4) $(M4_FLAGS) -D __TARBALL__=$(TARBALL) $< >$@
 
-%-image: %.Dockerfile config.patch
-	docker build -t tekii/atlassian-$* -f $< .
+.PRECIOUS:
+%-build-location: %/Dockerfile %/config.patch
 
-PRODUCTS:=$(CORE_PRODUCT) $(SOFT_PRODUCT) $(SDES_PRODUCT)
-IMAGES:=$(addsuffix -image, $(PRODUCTS))
+TEMP:=$(addsuffix -build-location, $(PRODUCTS))
+#.PHONY += $(TEMP)
+.PRECIOUS:
+$(TEMP):
+	$($@ created...)
+
+%-image: %-build-location
+	docker build -t tekii/atlassian-$* $*
+
+
+#IMAGES:=$(addsuffix /Dockerfile, $(PRODUCTS))
 #PHONY+= $(IMAGES)
-$(IMAGES):
+#$(IMAGES):
 #	$(info A top-level info)
 
 PHONY+= run
@@ -77,14 +95,14 @@ push-to-google:
 
 PHONY += clean
 clean:
-	rm -rf $(ORIGINAL_INSTALL) $(PATCHED_INSTALL)
+	rm -rf $(addsuffix /, $(PRODUCTS))
 
 PHONY += realclean
 realclean: clean
 #	rm -f $(TARBALL)
 
 PHONY += all
-all: $(addsuffix .Dockerfile, $(PRODUCTS))
+all: $(addsuffix /Dockerfile, $(PRODUCTS))
 
 .PHONY: $(PHONY)
 .DEFAULT_GOAL := all
