@@ -1,5 +1,5 @@
 #
-# JIRA Dockerfile
+# m4_upcase(__PRODUCT__) Dockerfile
 #
 #
 FROM tekii/server-jre
@@ -17,7 +17,7 @@ RUN apt-get --quiet=2 update && \
     echo "start downloading and decompressing __LOCATION__/__TARBALL__" && \
     wget -q -O - __LOCATION__/__TARBALL__ | tar -xz --strip=1 -C __INSTALL__ && \
     echo "end downloading and decompressing." && \
-    cd __INSTALL__ && patch -p1 -i config.patch && cd - && \
+    cd __INSTALL__ && patch --strip=1 --input=config.patch && cd - && \
     apt-get purge --assume-yes wget patch && \
     apt-get --quiet=2 autoremove --assume-yes && \
     apt-get --quiet=2 clean && \

@@ -1,5 +1,5 @@
 #
-# JIRA Dockerfile
+# m4_upcase(__PRODUCT__) Dockerfile
 #
 #
 FROM tekii/server-jre
@@ -17,7 +17,7 @@ RUN apt-get --quiet=2 update && \
     echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.0-jira-7.0.0.tar.gz" && \
     wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.0.0-jira-7.0.0.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
     echo "end downloading and decompressing." && \
-    cd /opt/atlassian/jira && patch -p1 -i config.patch && cd - && \
+    cd /opt/atlassian/jira && patch --strip=1 --input=config.patch && cd - && \
     apt-get purge --assume-yes wget patch && \
     apt-get --quiet=2 autoremove --assume-yes && \
     apt-get --quiet=2 clean && \
