@@ -1,5 +1,5 @@
 #
-# m4_upcase(__PRODUCT__) Dockerfile
+#  jira-software Dockerfile
 #
 #
 FROM tekii/server-jre

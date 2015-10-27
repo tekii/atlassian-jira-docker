@@ -1,5 +1,5 @@
 #
-# m4_upcase(__PRODUCT__) Dockerfile
+`#'  __PRODUCT__ Dockerfile
 #
 #
 FROM tekii/server-jre

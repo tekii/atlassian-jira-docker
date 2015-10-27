@@ -71,10 +71,15 @@ PHONY+= $(IMAGES)
 $(IMAGES): %-image: %/
 	docker build -t tekii/atlassian-$* $*
 
-PHONY+= run
-run:
-	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=/jira" -v $(shell pwd)/volume:$(HOME) tekii/atlassian-jira-core
+RUNS:=$(addprefix run-, $(PRODUCTS))
+PHONY+= $(RUNS)
+$(RUNS): run-%:
+	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=/jira" -v $(shell pwd)/volume:$(HOME) tekii/atlassian-$*
+
 #	docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(TAG)
+
+
+
 
 PHONY += push-to-google
 push-to-google:
@@ -83,9 +88,10 @@ push-to-google:
 
 PHONY += git-tag
 git-tag:
-	git tag -d 7.0.0
+	#git tag -d 7.0.0
 	git push origin :refs/tags/7.0.0
-	git push origin
+	git tag 7.0.0
+	git push --tags origin
 
 
 PHONY += clean

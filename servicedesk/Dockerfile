@@ -1,5 +1,5 @@
 #
-# JIRA Dockerfile
+#  servicedesk Dockerfile
 #
 #
 FROM tekii/server-jre
@@ -14,10 +14,10 @@ USER root
 
 RUN apt-get --quiet=2 update && \
     apt-get --quiet=2 install --assume-yes --no-install-recommends wget patch && \
-    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.0.tar.gz" && \
-    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-7.0.0.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
+    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-servicedesk-3.0.0-jira-7.0.0.tar.gz" && \
+    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-servicedesk-3.0.0-jira-7.0.0.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
     echo "end downloading and decompressing." && \
-    cd /opt/atlassian/jira && patch -p1 -i config.patch && cd - && \
+    cd /opt/atlassian/jira && patch --strip=1 --input=config.patch && cd - && \
     apt-get purge --assume-yes wget patch && \
     apt-get --quiet=2 autoremove --assume-yes && \
     apt-get --quiet=2 clean && \
