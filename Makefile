@@ -16,8 +16,6 @@ PATCHED_INSTALL:=patched
 
 HOME=/var/atlassian/application-data/jira
 INSTALL:=/opt/atlassian/jira
-#TAG_BASE:=atlassian
-#TAG:=tekii/$(TAG_BASE)
 RUN_USER:=daemon
 RUN_GROUP:=daemon
 
@@ -50,8 +48,6 @@ patched/: $(TARBALL) config.patch
 PHONY+= update-patch
 update-patch: $(ORIGINAL_INSTALL)
 	diff -ruN -p1 $(ORIGINAL_INSTALL)/ $(PATCHED_INSTALL)/  > config.patch; [ $$? -eq 1 ]
-#%/:
-#	mkdir -p $*
 
 .SECONDARY: $(addsuffix /config.patch, $(PRODUCTS))
 %/config.patch: config.patch #%/
@@ -64,7 +60,6 @@ $(SDES_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION)-ji
 
 $(addsuffix /Dockerfile, $(PRODUCTS)): %/Dockerfile: Dockerfile.m4 %/config.patch
 	$(M4) $(M4_FLAGS) -D __TARBALL__=$(TARBALL) -D __PRODUCT__=$* $< >$@
-
 
 IMAGES:=$(addsuffix -image, $(PRODUCTS))
 PHONY+= $(IMAGES)
@@ -79,8 +74,6 @@ $(RUNS): run-%:
 #	docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(TAG)
 
 
-
-
 PHONY += push-to-google
 push-to-google:
 	docker tag $(TAG) gcr.io/mrg-teky/$(TAG_BASE)
@@ -88,7 +81,7 @@ push-to-google:
 
 PHONY += git-tag
 git-tag:
-	#git tag -d 7.0.0
+	git tag -d 7.0.0
 	git push origin :refs/tags/7.0.0
 	git tag 7.0.0
 	git push --tags origin
