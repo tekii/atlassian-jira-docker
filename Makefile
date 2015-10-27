@@ -80,10 +80,10 @@ push-to-google:
 PHONY += git-tag git-push
 git-tag:
 	git tag -d 7.0.0
-	git push origin :refs/tags/7.0.0
 	git tag 7.0.0
 
 git-push:
+	git push origin :refs/tags/7.0.0
 	git push origin
 	git push --tags origin
 
