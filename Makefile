@@ -50,7 +50,7 @@ update-patch: $(ORIGINAL_INSTALL)
 	diff -ruN -p1 $(ORIGINAL_INSTALL)/ $(PATCHED_INSTALL)/  > config.patch; [ $$? -eq 1 ]
 
 .SECONDARY: $(addsuffix /config.patch, $(PRODUCTS))
-%/config.patch: config.patch #%/
+%/config.patch: config.patch
 	mkdir -p $*
 	cp $< $*/
 
@@ -70,9 +70,7 @@ RUNS:=$(addprefix run-, $(PRODUCTS))
 PHONY+= $(RUNS)
 $(RUNS): run-%:
 	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=/jira" -v $(shell pwd)/volume:$(HOME) tekii/atlassian-$*
-
 #	docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(TAG)
-
 
 PHONY += push-to-google
 push-to-google:
@@ -88,7 +86,6 @@ git-tag:
 git-push:
 	git push origin
 	git push --tags origin
-
 
 PHONY += clean
 clean:
