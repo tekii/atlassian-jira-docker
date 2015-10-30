@@ -82,11 +82,11 @@ push-to-google:
 
 PHONY += git-tag git-push
 git-tag:
-	git tag -d $(JIRA_VERSION)
+	-git tag -d $(JIRA_VERSION)
 	git tag $(JIRA_VERSION)
 
 git-push:
-	git push origin :refs/tags/$(JIRA_VERSION)
+	-git push origin :refs/tags/$(JIRA_VERSION)
 	git push origin
 	git push --tags origin
 
