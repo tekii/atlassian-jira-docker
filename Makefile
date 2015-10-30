@@ -1,12 +1,14 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=7.0.0
+JIRA_VERSION:=6.4.12
+
+JIRA_PRODUCT:=jira
 
 CORE_PRODUCT:=jira-core
-CORE_VERSION:=7.0.0
+CORE_VERSION:=6.4.12
 SOFT_PRODUCT:=jira-software
-SOFT_VERSION:=7.0.0
+SOFT_VERSION:=6.4.12
 SDES_PRODUCT:=servicedesk
 SDES_VERSION:=3.0.0
 
@@ -19,7 +21,7 @@ INSTALL:=/opt/atlassian/jira
 RUN_USER:=daemon
 RUN_GROUP:=daemon
 
-PRODUCTS:=$(CORE_PRODUCT) $(SOFT_PRODUCT) $(SDES_PRODUCT)
+PRODUCTS:=$(JIRA_PRODUCT) #$(CORE_PRODUCT) $(SOFT_PRODUCT) $(SDES_PRODUCT)
 
 ##
 ## M4
@@ -32,7 +34,7 @@ M4_FLAGS= -P \
 	-D __HOME__=$(HOME) \
 	-D __USER__=$(RUN_USER) -D __GROUP__=$(RUN_GROUP)
 
-TARBALL:=atlassian-$(CORE_PRODUCT)-$(CORE_VERSION).tar.gz
+TARBALL:=atlassian-$(JIRA_PRODUCT)-$(JIRA_VERSION).tar.gz
 $(TARBALL):
 	wget $(LOCATION)/$@
 
@@ -54,6 +56,7 @@ update-patch: $(ORIGINAL_INSTALL)
 	mkdir -p $*
 	cp $< $*/
 
+$(JIRA_PRODUCT)/Dockerfile: TARBALL=atlassian-$(JIRA_PRODUCT)-$(JIRA_VERSION).tar.gz
 $(CORE_PRODUCT)/Dockerfile: TARBALL=atlassian-$(CORE_PRODUCT)-$(CORE_VERSION).tar.gz
 $(SOFT_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SOFT_PRODUCT)-$(SOFT_VERSION)-jira-$(JIRA_VERSION).tar.gz
 $(SDES_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION)-jira-$(JIRA_VERSION).tar.gz
@@ -79,11 +82,11 @@ push-to-google:
 
 PHONY += git-tag git-push
 git-tag:
-	git tag -d 7.0.0
-	git tag 7.0.0
+	git tag -d $(JIRA_VERSION)
+	git tag $(JIRA_VERSION)
 
 git-push:
-	git push origin :refs/tags/7.0.0
+	git push origin :refs/tags/$(JIRA_VERSION)
 	git push origin
 	git push --tags origin
 
