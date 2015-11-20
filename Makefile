@@ -1,14 +1,14 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=7.0.0
+JIRA_VERSION:=7.0.2
 
 CORE_PRODUCT:=jira-core
-CORE_VERSION:=7.0.0
+CORE_VERSION:=7.0.2
 SOFT_PRODUCT:=jira-software
-SOFT_VERSION:=7.0.0
+SOFT_VERSION:=7.0.2
 SDES_PRODUCT:=servicedesk
-SDES_VERSION:=3.0.0
+SDES_VERSION:=3.0.2
 
 LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 ORIGINAL_INSTALL:=original
@@ -36,11 +36,11 @@ TARBALL:=atlassian-$(CORE_PRODUCT)-$(CORE_VERSION).tar.gz
 $(TARBALL):
 	wget $(LOCATION)/$@
 
-original/: $(TARBALL)
+$(ORIGINAL_INSTALL)/: $(TARBALL)
 	mkdir -p $@
 	tar zxvf $(TARBALL) -C $@ --strip-components=1
 
-patched/: $(TARBALL) config.patch
+$(PATCHED_INSTALL)/: $(TARBALL) config.patch
 	mkdir -p $@
 	tar zxvf $(TARBALL) -C $@ --strip-components=1
 	patch -p0 -i config.patch
@@ -58,7 +58,7 @@ $(CORE_PRODUCT)/Dockerfile: TARBALL=atlassian-$(CORE_PRODUCT)-$(CORE_VERSION).ta
 $(SOFT_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SOFT_PRODUCT)-$(SOFT_VERSION)-jira-$(JIRA_VERSION).tar.gz
 $(SDES_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION)-jira-$(JIRA_VERSION).tar.gz
 
-$(addsuffix /Dockerfile, $(PRODUCTS)): %/Dockerfile: Dockerfile.m4 %/config.patch
+$(addsuffix /Dockerfile, $(PRODUCTS)): %/Dockerfile: Dockerfile.m4 %/config.patch Makefile
 	$(M4) $(M4_FLAGS) -D __TARBALL__=$(TARBALL) -D __PRODUCT__=$* $< >$@
 
 IMAGES:=$(addsuffix -image, $(PRODUCTS))
@@ -79,11 +79,11 @@ push-to-google:
 
 PHONY += git-tag git-push
 git-tag:
-	git tag -d 7.0.0
-	git tag 7.0.0
+	-git tag -d $(JIRA_VERSION)
+	git tag $(JIRA_VERSION)
 
 git-push:
-	git push origin :refs/tags/7.0.0
+	-git push origin :refs/tags/$(JIRA_VERSION)
 	git push origin
 	git push --tags origin
 
