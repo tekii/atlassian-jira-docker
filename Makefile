@@ -1,14 +1,14 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=7.0.2
+JIRA_VERSION:=7.1.2
 
 CORE_PRODUCT:=jira-core
-CORE_VERSION:=7.0.2
+CORE_VERSION:=7.1.2
 SOFT_PRODUCT:=jira-software
-SOFT_VERSION:=7.0.2
+SOFT_VERSION:=7.1.2
 SDES_PRODUCT:=servicedesk
-SDES_VERSION:=3.0.2
+SDES_VERSION:=3.1.2
 
 LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 ORIGINAL_INSTALL:=original
