@@ -6,7 +6,7 @@ FROM tekii/server-jre
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
 
-LABEL version=7.1.2
+LABEL version=7.1.9
 
 COPY config.patch /opt/atlassian/jira/
 
@@ -14,8 +14,8 @@ USER root
 
 RUN apt-get --quiet=2 update && \
     apt-get --quiet=2 install --assume-yes --no-install-recommends wget patch && \
-    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-servicedesk-3.1.2-jira-7.1.2.tar.gz" && \
-    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-servicedesk-3.1.2-jira-7.1.2.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
+    echo "start downloading and decompressing https://www.atlassian.com/software/jira/downloads/binary/atlassian-servicedesk-3.1.9.tar.gz" && \
+    wget -q -O - https://www.atlassian.com/software/jira/downloads/binary/atlassian-servicedesk-3.1.9.tar.gz | tar -xz --strip=1 -C /opt/atlassian/jira && \
     echo "end downloading and decompressing." && \
     cd /opt/atlassian/jira && patch --strip=1 --input=config.patch && cd - && \
     apt-get purge --assume-yes wget patch && \
