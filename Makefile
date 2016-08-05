@@ -1,14 +1,14 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=7.1.2
+JIRA_VERSION:=7.1.9
 
 CORE_PRODUCT:=jira-core
-CORE_VERSION:=7.1.2
+CORE_VERSION:=7.1.9
 SOFT_PRODUCT:=jira-software
-SOFT_VERSION:=7.1.2
+SOFT_VERSION:=7.1.9
 SDES_PRODUCT:=servicedesk
-SDES_VERSION:=3.1.2
+SDES_VERSION:=3.1.9
 
 LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 ORIGINAL_INSTALL:=original
@@ -54,9 +54,9 @@ update-patch: $(ORIGINAL_INSTALL)
 	mkdir -p $*
 	cp $< $*/
 
-$(CORE_PRODUCT)/Dockerfile: TARBALL=atlassian-$(CORE_PRODUCT)-$(CORE_VERSION).tar.gz
-$(SOFT_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SOFT_PRODUCT)-$(SOFT_VERSION)-jira-$(JIRA_VERSION).tar.gz
-$(SDES_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION)-jira-$(JIRA_VERSION).tar.gz
+$(CORE_PRODUCT)/Dockerfile: TARBALL=atlassian-$(CORE_PRODUCT)-$(JIRA_VERSION).tar.gz
+$(SOFT_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SOFT_PRODUCT)-$(JIRA_VERSION).tar.gz
+$(SDES_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION).tar.gz
 
 $(addsuffix /Dockerfile, $(PRODUCTS)): %/Dockerfile: Dockerfile.m4 %/config.patch Makefile
 	$(M4) $(M4_FLAGS) -D __TARBALL__=$(TARBALL) -D __PRODUCT__=$* $< >$@
