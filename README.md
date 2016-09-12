@@ -6,6 +6,6 @@ Atlassian JIRA
 
 this is a work in progress...
 
-[![](https://images.microbadger.com/badges/image/tekii/atlassian-jira-software.svg)](http://microbadger.com/images/tekii/atlassian-jira-software "Get your own image badge on microbadger.com")
 
-[![](https://images.microbadger.com/badges/version/tekii/atlassian-jira-software.svg)](http://microbadger.com/images/tekii/atlassian-jira-software "Get your own version badge on microbadger.com")
+
+[![](https://images.microbadger.com/badges/image/tekii/atlassian-jira-software.svg)](http://microbadger.com/images/tekii/atlassian-jira-software "Get your own image badge on microbadger.com")  [![](https://images.microbadger.com/badges/version/tekii/atlassian-jira-software.svg)](http://microbadger.com/images/tekii/atlassian-jira-software "Get your own version badge on microbadger.com")
