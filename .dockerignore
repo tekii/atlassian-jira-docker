@@ -9,3 +9,5 @@ Dockerfile.m4
 original*
 patched*
 volume*
+m4*
+jira-*

@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '--no-cache', '--rm=true', '--tag', 'gcr.io/$PROJECT_ID/atlassian-__PRODUCT__', '--tag', 'gcr.io/$PROJECT_ID/atlassian-__PRODUCT__:__VERSION__', '.']
+
+images: ['gcr.io/$PROJECT_ID/atlassian-__PRODUCT__']

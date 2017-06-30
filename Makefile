@@ -1,14 +1,14 @@
 ##
 ## JIRA
 ##
-JIRA_VERSION:=7.3.1
+JIRA_VERSION:=7.4.0
 
 CORE_PRODUCT:=jira-core
-CORE_VERSION:=7.3.1
+CORE_VERSION:=7.4.0
 SOFT_PRODUCT:=jira-software
-SOFT_VERSION:=7.3.1
+SOFT_VERSION:=7.4.0
 SDES_PRODUCT:=servicedesk
-SDES_VERSION:=3.1.9
+SDES_VERSION:=3.1.10
 
 LOCATION:=https://www.atlassian.com/software/jira/downloads/binary
 ORIGINAL_INSTALL:=original
@@ -61,21 +61,19 @@ $(SDES_PRODUCT)/Dockerfile: TARBALL=atlassian-$(SDES_PRODUCT)-$(SDES_VERSION).ta
 $(addsuffix /Dockerfile, $(PRODUCTS)): %/Dockerfile: Dockerfile.m4 %/config.patch Makefile
 	$(M4) $(M4_FLAGS) -D __TARBALL__=$(TARBALL) -D __PRODUCT__=$* $< >$@
 
+$(addsuffix /cloudbuild.yaml, $(PRODUCTS)): %/cloudbuild.yaml: cloudbuild.yaml %/config.patch Makefile
+	$(M4) $(M4_FLAGS) -D __TARBALL__=$(TARBALL) -D __PRODUCT__=$* $< >$@
+
 IMAGES:=$(addsuffix -image, $(PRODUCTS))
 PHONY+= $(IMAGES)
-$(IMAGES): %-image: %/Dockerfile
-	docker build -t tekii/atlassian-$* $*
+$(IMAGES): %-image: %/Dockerfile %/cloudbuild.yaml
+	docker build -t gcr.io/mrg-teky/atlassian-$*:$(JIRA_VERSION) $*
 
 RUNS:=$(addprefix run-, $(PRODUCTS))
 PHONY+= $(RUNS)
 $(RUNS): run-%:
-	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=/jira" -v $(shell pwd)/volume:$(HOME) tekii/atlassian-$*
+	docker run -p 8080:8080 -p 8443:8443 -e "CATALINA_OPTS=-Dtekii.contextPath=/jira" -v $(shell pwd)/volume:$(HOME) gcr.io/mrg-teky/atlassian-$*:$(JIRA_VERSION)
 #	docker run -p 8080:8080 --link postgres-makefile-run:jira-makefile-run  -v $(shell pwd)/volume:$(JIRA_HOME) $(TAG)
-
-PHONY += push-to-google
-push-to-google:
-	docker tag $(TAG) gcr.io/mrg-teky/$(TAG_BASE)
-	gcloud docker push gcr.io/mrg-teky/$(TAG_BASE)
 
 PHONY += git-tag git-push
 git-tag:

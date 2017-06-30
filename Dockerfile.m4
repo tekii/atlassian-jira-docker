@@ -2,7 +2,7 @@
 `#'  __PRODUCT__ Dockerfile
 #
 #
-FROM tekii/server-jre
+FROM gcr.io/mrg-teky/jre:8u131
 
 MAINTAINER Pablo Jorge Eduardo Rodriguez <pr@tekii.com.ar>
 
