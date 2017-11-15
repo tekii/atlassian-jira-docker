@@ -1,5 +1,5 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--no-cache', '--rm=true', '--tag', 'gcr.io/$PROJECT_ID/atlassian-jira-software', '--tag', 'gcr.io/$PROJECT_ID/atlassian-jira-software:7.5.0', 'jira-software/']
+  args: ['build', '--no-cache', '--rm=true', '--tag', 'gcr.io/$PROJECT_ID/atlassian-jira-software', '--tag', 'gcr.io/$PROJECT_ID/atlassian-jira-software:7.5.3', 'jira-software/']
 
 images: ['gcr.io/$PROJECT_ID/atlassian-jira-software']
