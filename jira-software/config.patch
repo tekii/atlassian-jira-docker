@@ -5,12 +5,12 @@ diff -ruN -p1 original/bin/setenv.sh patched/bin/setenv.sh
  #
 -JVM_SUPPORT_RECOMMENDED_ARGS=""
 +JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.plugins.enable.wait=300"
- 
+
 @@ -14,3 +14,3 @@ JVM_SUPPORT_RECOMMENDED_ARGS=""
  JVM_MINIMUM_MEMORY="384m"
 -JVM_MAXIMUM_MEMORY="768m"
-+JVM_MAXIMUM_MEMORY="512m"
- 
++JVM_MAXIMUM_MEMORY="768m"
+
 @@ -101,2 +101 @@ echo ""
  echo "Server startup logs are located in $LOGBASEABS/logs/catalina.out"
 -
@@ -18,7 +18,7 @@ diff -ruN -p1 original/conf/server.xml patched/conf/server.xml
 --- original/conf/server.xml	2015-09-30 11:10:09.000000000 -0300
 +++ patched/conf/server.xml	2015-10-27 16:19:08.758256114 -0300
 @@ -66,2 +66,17 @@
- 
+
 +        <Connector port="8443"
 +                   maxThreads="50"
 +                   minSpareThreads="25"
@@ -36,7 +36,6 @@ diff -ruN -p1 original/conf/server.xml patched/conf/server.xml
 +
          <!--
 @@ -119,3 +134,3 @@
- 
+
 -                <Context path="" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
 +                <Context path="${tekii.contextPath}" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
- 
